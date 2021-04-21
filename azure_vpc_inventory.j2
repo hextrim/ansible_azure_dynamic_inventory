@@ -1,0 +1,93 @@
+# MAIN
+[{{ rg }}]
+{{ bastion_vm['vm_name'] }} ansible_host={{ bastion_vm['vm_private_ip'] }}
+{{ consul_vm['vm_name'] }} ansible_host={{ consul_vm['vm_private_ip'] }}
+{% for host in vmss_dict['amq_vmss']['ids'] -%}
+{{ host['vm_name'] }} ansible_host={{ host['vm_private_ip'] }}
+{% endfor -%}
+{% for host in vmss_dict['consul_vmss']['ids'] -%}
+{{ host['vm_name'] }} ansible_host={{ host['vm_private_ip'] }}
+{% endfor -%}
+{% for host in vmss_dict['encompass_vmss']['ids'] -%}
+{{ host['vm_name'] }} ansible_host={{ host['vm_private_ip'] }}
+{% endfor -%}
+{% for host in vmss_dict['gluster_vmss']['ids'] -%} 
+{{ host['vm_name'] }} ansible_host={{ host['vm_private_ip'] }}
+{% endfor -%}
+{% for host in vmss_dict['haproxy_vmss']['ids'] -%} 
+{{ host['vm_name'] }} ansible_host={{ host['vm_private_ip'] }}
+{% endfor -%}
+{% for host in vmss_dict['mongo_vmss']['ids'] -%}
+{{ host['vm_name'] }} ansible_host={{ host['vm_private_ip'] }}
+{% endfor %}
+
+[bastion]
+{{ bastion_vm['vm_name'] }} ansible_host={{ bastion_vm['vm_private_ip'] }}
+
+[consul]
+{{ consul_vm['vm_name'] }} ansible_host={{ consul_vm['vm_private_ip'] }}
+
+[activemq]
+{% for host in vmss_dict['amq_vmss']['ids'] -%}
+{{ host['vm_name'] }} ansible_host={{ host['vm_private_ip'] }}
+{% endfor %}
+[consul]
+{% for host in vmss_dict['consul_vmss']['ids'] -%}
+{{ host['vm_name'] }} ansible_host={{ host['vm_private_ip'] }}
+{% endfor %}
+[tomcat]
+{% for host in vmss_dict['encompass_vmss']['ids'] -%}
+{{ host['vm_name'] }} ansible_host={{ host['vm_private_ip'] }}
+{% endfor %}
+[glusterfs]
+{% for host in vmss_dict['gluster_vmss']['ids'] -%}
+{{ host['vm_name'] }} ansible_host={{ host['vm_private_ip'] }}
+{% endfor %}
+[haproxy]
+{% for host in vmss_dict['haproxy_vmss']['ids'] -%}
+{{ host['vm_name'] }} ansible_host={{ host['vm_private_ip'] }}
+{% endfor %}
+[mongo]
+{% for host in vmss_dict['mongo_vmss']['ids'] -%}
+{{ host['vm_name'] }} ansible_host={{ host['vm_private_ip'] }}
+{% endfor -%}
+
+[mysql]
+[ossim]
+[nat]
+[vpn]
+
+# CHILDRENS
+# [{{ rg }}:children]
+# {{ rg }}
+
+[tomcats:children]
+tomcat
+
+[mongo:children]
+mongo
+
+[amq:children]
+activemq
+
+[mysql:children]
+mysql
+
+[haproxy:children]
+haproxy
+
+[gluster:children]
+glusterfs
+
+[consul:children]
+consul
+
+[ossim:children]
+ossim
+
+[nat:children]
+nat
+
+[vpn:children]
+vpn
+
